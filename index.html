@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>宮崎市 ごみ出しカレンダー</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@400;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="app-container">
+        <!-- ヘッダー -->
+        <header class="header">
+            <div class="header-icon">
+                <img src="palm_tree.png" alt="宮崎のヤシの木" class="palm-tree">
+            </div>
+            <div class="header-title">
+                <h1>Miyazaki Gomi-App</h1>
+                <p>宮崎市 ごみ出し確認</p>
+            </div>
+        </header>
+
+        <!-- メイン: 次のごみ -->
+        <main class="main-widget">
+            <div class="date-display" id="date-display">
+                <!-- 日付がここに入ります -->
+            </div>
+            
+            <div class="next-gomi-card glass-panel">
+                <p class="next-label">次に出すごみ (あした)</p>
+                <div class="gomi-type" id="next-gomi-type">
+                    --
+                </div>
+                <div class="gomi-icon" id="next-gomi-icon">
+                    🗑️
+                </div>
+            </div>
+        </main>
+
+        <!-- 設定・検索パネル -->
+        <section class="settings-section glass-panel">
+            <h2><span class="settings-icon">🔍</span> 町名でエリアを検索</h2>
+            <div class="search-container">
+                <input type="text" id="area-search" class="area-search-input" placeholder="町名を入力 (例: 青島)" autocomplete="off">
+                <ul id="search-results" class="search-results hidden"></ul>
+            </div>
+            <div class="current-area-display" id="current-area-display">
+                <p>現在の設定地区: <strong id="current-area-name">未設定</strong></p>
+            </div>
+        </section>
+
+        <!-- リンク追加 -->
+        <section class="link-section">
+            <a href="https://manage.delight-system.com/threeR/web/bunbetsu?menu=bunbetsu&jichitaiId=miyazakishi" target="_blank" rel="noopener" class="btn-bunbetsu">
+                <span class="btn-icon">💡</span> ごみの分別を検索（豆辞典）
+            </a>
+        </section>
+
+        <!-- 週間スケジュール簡易表示 -->
+        <section class="schedule-section glass-panel">
+            <h2>📅 週間スケジュール</h2>
+            <ul class="schedule-list" id="schedule-list">
+                <li>地区を選択すると表示されます</li>
+            </ul>
+        </section>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>

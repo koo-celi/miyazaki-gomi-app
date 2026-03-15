@@ -1,0 +1,294 @@
+/* 全体設定 */
+:root {
+    --bg-gradient-top: #E0F2FE;
+    --bg-gradient-bottom: #FFF7ED;
+    --primary-color: #0284C7;
+    --primary-hover: #0369a1;
+    --text-main: #1e293b; /* 視認性向上のため少し濃く */
+    --text-light: #475569;
+    
+    /* ごみの種類別カラー */
+    --color-burn: #EF4444; 
+    --color-unburn: #3B82F6; 
+    --color-pet: #10B981; 
+    --color-paper: #F59E0B; 
+    --color-can: #8B5CF6; 
+    --color-resource: #0ea5e9; /* 資源物 */
+    --color-metal: #64748b; /* 不燃・金属 */
+    --color-none: #94A3B8;
+
+    --glass-bg: rgba(255, 255, 255, 0.7);
+    --glass-border: rgba(255, 255, 255, 0.8);
+    --shadow-soft: 0 8px 32px rgba(0, 0, 0, 0.08);
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'Zen Maru Gothic', sans-serif;
+}
+
+body {
+    background: linear-gradient(135deg, var(--bg-gradient-top) 0%, var(--bg-gradient-bottom) 100%);
+    min-height: 100vh;
+    color: var(--text-main);
+    display: flex;
+    justify-content: center;
+    padding: 20px 10px;
+}
+
+/* アプリのコンテナ */
+.app-container {
+    width: 100%;
+    max-width: 480px;
+    display: flex;
+    flex-direction: column;
+    gap: 24px; /* 隙間を広げて誤タップ防止 */
+}
+
+/* グラスモーフィズム共通パネル */
+.glass-panel {
+    background: var(--glass-bg);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid var(--glass-border);
+    border-radius: 24px;
+    padding: 24px 20px; /* タップ領域確保のため余白拡大 */
+    box-shadow: var(--shadow-soft);
+}
+
+/* ヘッダー */
+.header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 10px;
+}
+
+.header-icon {
+    width: 64px;
+    height: 64px;
+    background: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+}
+
+.palm-tree {
+    width: 44px;
+    height: 44px;
+    object-fit: contain;
+}
+
+.header-title h1 {
+    font-size: 1.3rem; /* 拡大 */
+    font-weight: 700;
+    color: var(--primary-color);
+}
+
+.header-title p {
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--text-light);
+    margin-top: 2px;
+}
+
+/* 日付とメインウィジェット */
+.date-display {
+    font-size: 1.2rem; /* 拡大 */
+    font-weight: 700;
+    text-align: center;
+    margin-bottom: 12px;
+    color: var(--primary-color);
+}
+
+.next-gomi-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 32px 20px;
+    background: white;
+}
+
+.next-label {
+    font-size: 1.1rem; /* 拡大 */
+    font-weight: 700;
+    color: var(--text-light);
+    margin-bottom: 16px;
+    background: #F1F5F9;
+    padding: 8px 18px;
+    border-radius: 20px;
+}
+
+.gomi-type {
+    font-size: 2.2rem; /* 変わらず大きく */
+    font-weight: 700;
+    line-height: 1.2;
+    margin-bottom: 8px;
+    color: var(--text-main);
+    transition: color 0.3s ease;
+}
+
+.gomi-icon {
+    font-size: 4.5rem; /* ちょっと拡大 */
+    margin-top: 10px;
+    filter: drop-shadow(0 4px 8px rgba(0,0,0,0.1));
+}
+
+/* 設定・検索セクション */
+.settings-section h2, .schedule-section h2 {
+    font-size: 1.1rem;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--primary-color);
+    font-weight: 700;
+}
+
+.search-container {
+    position: relative;
+    width: 100%;
+}
+
+.area-search-input {
+    width: 100%;
+    padding: 18px 16px; /* 押しやすく大きく */
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--text-main);
+    background-color: white;
+    border: 2px solid #E2E8F0;
+    border-radius: 16px;
+    outline: none;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.02);
+    transition: all 0.2s ease;
+}
+
+.area-search-input:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 4px rgba(2, 132, 199, 0.1);
+}
+
+/* 検索結果リスト */
+.search-results {
+    position: absolute;
+    top: calc(100% + 8px);
+    left: 0;
+    width: 100%;
+    background: white;
+    border-radius: 16px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+    max-height: 250px;
+    overflow-y: auto;
+    z-index: 10;
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+}
+
+.search-results.hidden {
+    display: none;
+}
+
+.search-results li {
+    padding: 16px;
+    font-size: 1.05rem;
+    font-weight: 500;
+    border-bottom: 1px solid #f1f5f9;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+.search-results li:last-child {
+    border-bottom: none;
+}
+.search-results li:hover, .search-results li:active {
+    background: #f8fafc;
+    color: var(--primary-color);
+}
+
+.current-area-display {
+    margin-top: 16px;
+    padding: 12px;
+    background: #F0F9FF;
+    border-radius: 12px;
+    text-align: center;
+    font-size: 1rem;
+    font-weight: 500;
+    color: var(--primary-color);
+}
+.current-area-display strong {
+    font-size: 1.1rem;
+    color: var(--text-main);
+}
+
+/* リンクボタン */
+.link-section {
+    display: flex;
+    justify-content: center;
+}
+.btn-bunbetsu {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    width: 100%;
+    background: var(--primary-color);
+    color: white;
+    text-decoration: none;
+    padding: 18px;
+    border-radius: 16px;
+    font-size: 1.1rem;
+    font-weight: 700;
+    box-shadow: 0 4px 15px rgba(2, 132, 199, 0.3);
+    transition: all 0.2s ease;
+}
+.btn-bunbetsu:active {
+    transform: scale(0.98);
+    background: var(--primary-hover);
+}
+
+/* スケジュールリスト */
+.schedule-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.schedule-list li {
+    display: flex;
+    justify-content: space-between;
+    padding: 14px 16px; /* 拡大 */
+    background: white;
+    border-radius: 12px;
+    font-weight: 500;
+    font-size: 1rem; /* 拡大 */
+}
+
+.schedule-day {
+    font-weight: 700;
+    color: var(--text-light);
+    width: 45px;
+}
+
+.schedule-item {
+    font-weight: 700;
+    text-align: right;
+    flex: 1;
+}
+
+/* カラーステート用クラス */
+.color-burn { color: var(--color-burn); }
+.color-unburn { color: var(--color-metal); }
+.color-pet { color: var(--color-pet); }
+.color-paper { color: var(--color-paper); }
+.color-can { color: var(--color-can); }
+.color-resource { color: var(--color-resource); }
+.color-metal { color: var(--color-metal); }
+.color-none { color: var(--color-none); }
