@@ -20,19 +20,30 @@
             </div>
         </header>
 
-        <!-- メイン: 次のごみ -->
+        <!-- メイン: 今日のごみと明日のごみ -->
         <main class="main-widget">
             <div class="date-display" id="date-display">
                 <!-- 日付がここに入ります -->
             </div>
             
-            <div class="next-gomi-card glass-panel">
-                <p class="next-label">次に出すごみ (あした)</p>
-                <div class="gomi-type" id="next-gomi-type">
-                    --
+            <div class="gomi-cards-container">
+                <div class="gomi-card glass-panel">
+                    <p class="gomi-label">今日のごみ</p>
+                    <div class="gomi-type" id="today-gomi-type">
+                        --
+                    </div>
+                    <div class="gomi-icon" id="today-gomi-icon">
+                        🗑️
+                    </div>
                 </div>
-                <div class="gomi-icon" id="next-gomi-icon">
-                    🗑️
+                <div class="gomi-card glass-panel">
+                    <p class="gomi-label">明日のごみ</p>
+                    <div class="gomi-type" id="next-gomi-type">
+                        --
+                    </div>
+                    <div class="gomi-icon" id="next-gomi-icon">
+                        🗑️
+                    </div>
                 </div>
             </div>
         </main>

@@ -57,7 +57,8 @@ const GOMI_SCHEDULES = {
             "ペットボトル・プラスチック製容器包装": { type: 'weekly', days: [3] }, // プラ: 水 (ペットは別途条件があるが、宮崎市はプラとペットを分けて記載。ここではプラをベースにし、特定の日はペットにする)
             "ペットボトル": { type: 'monthly', day: 4, weeks: [1, 3] }, // 第1・3木
             "空き缶・空きびん": { type: 'monthly', day: 4, weeks: [2, 4] }, // 第2・4木
-            "資源物": { type: 'monthly', day: 3, weeks: [1] } // 第1水
+            "資源物": { type: 'monthly', day: 3, weeks: [1] }, // 第1水
+            "古紙・衣類": { type: 'monthly', day: 1, weeks: [1, 2, 3, 4] }
         }
     },
     "南B": {
@@ -68,7 +69,8 @@ const GOMI_SCHEDULES = {
             "ペットボトル・プラスチック製容器包装": { type: 'weekly', days: [3] },
             "ペットボトル": { type: 'monthly', day: 4, weeks: [2, 4] },
             "空き缶・空きびん": { type: 'monthly', day: 4, weeks: [1, 3] },
-            "資源物": { type: 'monthly', day: 3, weeks: [2] }
+            "資源物": { type: 'monthly', day: 3, weeks: [2] },
+            "古紙・衣類": { type: 'monthly', day: 4, weeks: [1, 2, 3, 4] }
         }
     },
     "北A": {
@@ -79,7 +81,8 @@ const GOMI_SCHEDULES = {
             "ペットボトル・プラスチック製容器包装": { type: 'weekly', days: [5] }, // プラ: 金
             "ペットボトル": { type: 'monthly', day: 2, weeks: [1, 3] },
             "空き缶・空きびん": { type: 'monthly', day: 2, weeks: [2, 4] },
-            "資源物": { type: 'monthly', day: 3, weeks: [3] }
+            "資源物": { type: 'monthly', day: 3, weeks: [3] },
+            "古紙・衣類": { type: 'monthly', day: 5, weeks: [1, 2, 3, 4] }
         }
     },
     "北B": {
@@ -90,7 +93,8 @@ const GOMI_SCHEDULES = {
             "ペットボトル・プラスチック製容器包装": { type: 'weekly', days: [5] },
             "ペットボトル": { type: 'monthly', day: 2, weeks: [2, 4] },
             "空き缶・空きびん": { type: 'monthly', day: 2, weeks: [1, 3] },
-            "資源物": { type: 'monthly', day: 3, weeks: [4] }
+            "資源物": { type: 'monthly', day: 3, weeks: [4] },
+            "古紙・衣類": { type: 'monthly', day: 2, weeks: [1, 2, 3, 4] }
         }
     }
 };
@@ -103,6 +107,7 @@ const GOMI_STYLE_MAP = {
     "ペットボトル": { class: "color-pet", icon: "🧴" },
     "空き缶・空きびん": { class: "color-can", icon: "🥫" },
     "資源物": { class: "color-resource", icon: "📦" },
+    "古紙・衣類": { class: "color-paper", icon: "📰" },
     "なし": { class: "color-none", icon: "✨" }
 };
 
@@ -120,36 +125,37 @@ function getNthDayOfWeek(date) {
 }
 
 // 特定の日付におけるごみの種類を判定する関数
-function getGomiTypeForDate(areaKey, targetDate) {
-    if (!areaKey || !GOMI_SCHEDULES[areaKey]) return "なし";
+function getGomiTypesForDate(areaKey, targetDate) {
+    if (!areaKey || !GOMI_SCHEDULES[areaKey]) return ["なし"];
 
     const rules = GOMI_SCHEDULES[areaKey].rules;
     const targetDay = targetDate.getDay(); // 0-6
     const targetNthWeek = getNthDayOfWeek(targetDate); // 1-5
 
-    // 判定の優先順位がある場合を考慮（月1回系のものを優先的にチェック）
+    let result = [];
+
     // 1. 月ごとの特定週のごみをチェック
     for (const [gomiName, rule] of Object.entries(rules)) {
         if (rule.type === 'monthly' && rule.day === targetDay && rule.weeks.includes(targetNthWeek)) {
-            return gomiName;
+            result.push(gomiName);
         }
     }
     // 2. 毎週のごみをチェック
     for (const [gomiName, rule] of Object.entries(rules)) {
         if (rule.type === 'weekly' && rule.days.includes(targetDay)) {
-            // 例外処理: 水曜日はプラだが、第1水とかぶる場合がある。「資源物」などのルールが上でマッチしてなければプラになる
-            return gomiName;
+            result.push(gomiName);
         }
     }
 
-    return "なし";
+    return result.length > 0 ? result : ["なし"];
 }
 
 document.addEventListener("DOMContentLoaded", () => {
     const dateDisplay = document.getElementById("date-display");
+    const todayGomiType = document.getElementById("today-gomi-type");
+    const todayGomiIcon = document.getElementById("today-gomi-icon");
     const nextGomiType = document.getElementById("next-gomi-type");
     const nextGomiIcon = document.getElementById("next-gomi-icon");
-    const nextLabel = document.querySelector(".next-label");
     const scheduleList = document.getElementById("schedule-list");
     
     // 検索・エリアエリアDOM
@@ -234,49 +240,66 @@ document.addEventListener("DOMContentLoaded", () => {
         const areaData = GOMI_SCHEDULES[areaKey];
         currentAreaName.textContent = `${areaData.name} (設定元: ${townName})`;
         
-        // 1. 明日のごみ判定
-        const tomorrowGomi = getGomiTypeForDate(areaKey, tomorrow);
-        const styleInfo = GOMI_STYLE_MAP[tomorrowGomi] || GOMI_STYLE_MAP["なし"];
+        // 1. 今日のごみ判定
+        const todayGomis = getGomiTypesForDate(areaKey, today);
+        renderGomiCard(todayGomiType, todayGomiIcon, todayGomis);
 
-        nextGomiType.textContent = tomorrowGomi === "なし" ? "収集なし" : tomorrowGomi;
-        nextGomiType.className = `gomi-type ${styleInfo.class}`;
-        nextGomiIcon.textContent = styleInfo.icon;
-        nextLabel.textContent = `あした（${dayNames[tomorrowDayOfWeek]}）出すごみ`;
+        // 2. 明日のごみ判定
+        const tomorrowGomis = getGomiTypesForDate(areaKey, tomorrow);
+        renderGomiCard(nextGomiType, nextGomiIcon, tomorrowGomis);
 
-        // 2. 週間スケジュールの更新 (明日から向こう1週間の予定を表示する形に変更すると分かりやすい)
+        // 3. 週間スケジュールの更新 (今日から向こう1週間の予定を表示)
         scheduleList.innerHTML = "";
         
-        for (let i = 1; i <= 7; i++) {
+        for (let i = 0; i < 7; i++) {
             const listDate = new Date(today);
             listDate.setDate(today.getDate() + i);
             const listDay = listDate.getDay();
             const listNthWeek = getNthDayOfWeek(listDate);
             
-            const gomi = getGomiTypeForDate(areaKey, listDate);
-            let displayLabel = gomi;
-            if (gomi === "なし") displayLabel = "収集なし";
+            const gomis = getGomiTypesForDate(areaKey, listDate);
 
-            const styleInfoForList = GOMI_STYLE_MAP[gomi] || GOMI_STYLE_MAP["なし"];
             const li = document.createElement("li");
-            
-            // 例: 「10/24(木)」というフォーマットで表示
             const dateStr = `${listDate.getMonth() + 1}/${listDate.getDate()}(${dayNames[listDay]})`;
+
+            const gomiBadges = gomis.map(gomi => {
+                let displayLabel = gomi === "なし" ? "収集なし" : gomi;
+                const styleInfo = GOMI_STYLE_MAP[gomi] || GOMI_STYLE_MAP["なし"];
+                return `<span class="schedule-badge ${styleInfo.class}">${styleInfo.icon} ${displayLabel}</span>`;
+            }).join("");
 
             li.innerHTML = `
                 <span class="schedule-day">${dateStr}</span>
-                <span class="schedule-item ${styleInfoForList.class}">
-                    ${styleInfoForList.icon} ${displayLabel}
+                <span class="schedule-item-multi">
+                    ${gomiBadges}
                 </span>
             `;
             scheduleList.appendChild(li);
         }
     }
 
+    function renderGomiCard(typeEl, iconEl, gomis) {
+        // 現在のgomi-typeクラスをリセットして複数対応のレイアウトはCSSに任せる
+        typeEl.className = "gomi-type";
+        typeEl.innerHTML = gomis.map(gomi => {
+            const styleInfo = GOMI_STYLE_MAP[gomi] || GOMI_STYLE_MAP["なし"];
+            const displayObj = gomi === "なし" ? "収集なし" : gomi;
+            return `<div class="${styleInfo.class}">${displayObj}</div>`;
+        }).join("");
+
+        iconEl.innerHTML = gomis.map(gomi => {
+            const styleInfo = GOMI_STYLE_MAP[gomi] || GOMI_STYLE_MAP["なし"];
+            return `<span>${styleInfo.icon}</span>`;
+        }).join("");
+    }
+
     function resetDisplay() {
-        nextGomiType.textContent = "町名を検索してね";
-        nextGomiType.className = "gomi-type color-none";
-        nextGomiIcon.textContent = "👆";
-        nextLabel.textContent = "次に出すごみ";
+        if(todayGomiType) {
+            todayGomiType.innerHTML = `<div class="color-none">町名を検索</div>`;
+            todayGomiIcon.innerHTML = `<span>🔍</span>`;
+        }
+        nextGomiType.innerHTML = `<div class="color-none">リストから選択</div>`;
+        nextGomiIcon.innerHTML = `<span>👆</span>`;
         currentAreaName.textContent = "未設定";
         scheduleList.innerHTML = "<li>町名を検索・設定すると表示されます</li>";
     }

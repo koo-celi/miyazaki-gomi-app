@@ -105,39 +105,57 @@ body {
     color: var(--primary-color);
 }
 
-.next-gomi-card {
+.gomi-cards-container {
+    display: flex;
+    gap: 12px;
+    width: 100%;
+}
+
+.gomi-card {
+    flex: 1;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     text-align: center;
-    padding: 32px 20px;
+    padding: 24px 10px;
     background: white;
 }
 
-.next-label {
-    font-size: 1.1rem; /* 拡大 */
+.gomi-label {
+    font-size: 0.95rem; /* ちょっと小さく */
     font-weight: 700;
     color: var(--text-light);
-    margin-bottom: 16px;
+    margin-bottom: 12px;
     background: #F1F5F9;
-    padding: 8px 18px;
-    border-radius: 20px;
+    padding: 6px 14px;
+    border-radius: 16px;
+    white-space: nowrap;
 }
 
 .gomi-type {
-    font-size: 2.2rem; /* 変わらず大きく */
+    font-size: 1.3rem; /* 複数並ぶことを考慮して少し縮小 */
     font-weight: 700;
-    line-height: 1.2;
+    line-height: 1.3;
     margin-bottom: 8px;
     color: var(--text-main);
     transition: color 0.3s ease;
+    min-height: 3.9rem; /* 3行程度になることも考慮して高さ確保 */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
 }
 
 .gomi-icon {
-    font-size: 4.5rem; /* ちょっと拡大 */
-    margin-top: 10px;
+    font-size: 3rem; /* 少し縮小 */
+    margin-top: 5px;
     filter: drop-shadow(0 4px 8px rgba(0,0,0,0.1));
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    justify-content: center;
 }
 
 /* 設定・検索セクション */
@@ -264,6 +282,7 @@ body {
 .schedule-list li {
     display: flex;
     justify-content: space-between;
+    align-items: center;
     padding: 14px 16px; /* 拡大 */
     background: white;
     border-radius: 12px;
@@ -274,13 +293,27 @@ body {
 .schedule-day {
     font-weight: 700;
     color: var(--text-light);
-    width: 45px;
+    width: 60px; /* 少し広げる */
+    flex-shrink: 0;
 }
 
-.schedule-item {
-    font-weight: 700;
-    text-align: right;
+.schedule-item-multi {
     flex: 1;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    justify-content: flex-end;
+}
+
+.schedule-badge {
+    font-weight: 700;
+    padding: 4px 8px;
+    border-radius: 6px;
+    background: #f8fafc;
+    font-size: 0.95rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
 }
 
 /* カラーステート用クラス */
