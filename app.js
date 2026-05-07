@@ -54,10 +54,10 @@ const GOMI_SCHEDULES = {
         rules: {
             "燃やせるごみ": { type: 'weekly', days: [2, 5] }, // 火金
             "燃やせないごみ・金属類": { type: 'monthly', day: 1, weeks: [3] }, // 第3月
-            "ペットボトル・プラスチック製容器包装": { type: 'weekly', days: [3] }, // プラ: 水 (ペットは別途条件があるが、宮崎市はプラとペットを分けて記載。ここではプラをベースにし、特定の日はペットにする)
+            "プラスチック製容器包装": { type: 'weekly', days: [3] }, // プラ: 水 (ペットは別途条件があるが、宮崎市はプラとペットを分けて記載。ここではプラをベースにし、特定の日はペットにする)
             "ペットボトル": { type: 'monthly', day: 4, weeks: [1, 3] }, // 第1・3木
             "空き缶・空きびん": { type: 'monthly', day: 4, weeks: [2, 4] }, // 第2・4木
-            "資源物": { type: 'monthly', day: 3, weeks: [1] }, // 第1水
+            "電池等その他資源": { type: 'monthly', day: 3, weeks: [1] }, // 第1水
             "古紙・衣類": { type: 'monthly', day: 1, weeks: [1, 2, 3, 4] }
         }
     },
@@ -66,10 +66,10 @@ const GOMI_SCHEDULES = {
         rules: {
             "燃やせるごみ": { type: 'weekly', days: [2, 5] },
             "燃やせないごみ・金属類": { type: 'monthly', day: 1, weeks: [4] },
-            "ペットボトル・プラスチック製容器包装": { type: 'weekly', days: [3] },
+            "プラスチック製容器包装": { type: 'weekly', days: [3] },
             "ペットボトル": { type: 'monthly', day: 4, weeks: [2, 4] },
             "空き缶・空きびん": { type: 'monthly', day: 4, weeks: [1, 3] },
-            "資源物": { type: 'monthly', day: 3, weeks: [2] },
+            "電池等その他資源": { type: 'monthly', day: 3, weeks: [2] },
             "古紙・衣類": { type: 'monthly', day: 4, weeks: [1, 2, 3, 4] }
         }
     },
@@ -78,10 +78,10 @@ const GOMI_SCHEDULES = {
         rules: {
             "燃やせるごみ": { type: 'weekly', days: [1, 4] }, // 月木
             "燃やせないごみ・金属類": { type: 'monthly', day: 3, weeks: [1] },
-            "ペットボトル・プラスチック製容器包装": { type: 'weekly', days: [5] }, // プラ: 金
+            "プラスチック製容器包装": { type: 'weekly', days: [5] }, // プラ: 金
             "ペットボトル": { type: 'monthly', day: 2, weeks: [1, 3] },
             "空き缶・空きびん": { type: 'monthly', day: 2, weeks: [2, 4] },
-            "資源物": { type: 'monthly', day: 3, weeks: [3] },
+            "電池等その他資源": { type: 'monthly', day: 3, weeks: [3] },
             "古紙・衣類": { type: 'monthly', day: 5, weeks: [1, 2, 3, 4] }
         }
     },
@@ -90,10 +90,10 @@ const GOMI_SCHEDULES = {
         rules: {
             "燃やせるごみ": { type: 'weekly', days: [1, 4] },
             "燃やせないごみ・金属類": { type: 'monthly', day: 3, weeks: [2] },
-            "ペットボトル・プラスチック製容器包装": { type: 'weekly', days: [5] },
+            "プラスチック製容器包装": { type: 'weekly', days: [5] },
             "ペットボトル": { type: 'monthly', day: 2, weeks: [2, 4] },
             "空き缶・空きびん": { type: 'monthly', day: 2, weeks: [1, 3] },
-            "資源物": { type: 'monthly', day: 3, weeks: [4] },
+            "電池等その他資源": { type: 'monthly', day: 3, weeks: [4] },
             "古紙・衣類": { type: 'monthly', day: 2, weeks: [1, 2, 3, 4] }
         }
     }
@@ -103,10 +103,10 @@ const GOMI_SCHEDULES = {
 const GOMI_STYLE_MAP = {
     "燃やせるごみ": { class: "color-burn", icon: "🔥" },
     "燃やせないごみ・金属類": { class: "color-metal", icon: "🛠️" },
-    "ペットボトル・プラスチック製容器包装": { class: "color-pet", icon: "🧴" }, // 今回は統合名にするがアイコンは🧴
+    "プラスチック製容器包装": { class: "color-pet", icon: "🧴" }, // 今回は統合名にするがアイコンは🧴
     "ペットボトル": { class: "color-pet", icon: "🧴" },
     "空き缶・空きびん": { class: "color-can", icon: "🥫" },
-    "資源物": { class: "color-resource", icon: "📦" },
+    "電池等その他資源": { class: "color-resource", icon: "📦" },
     "古紙・衣類": { class: "color-paper", icon: "📰" },
     "なし": { class: "color-none", icon: "✨" }
 };
